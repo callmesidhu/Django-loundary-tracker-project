@@ -1,0 +1,59 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+*.env
+*.venv
+
+# Django-related
+db.sqlite3
+*.sqlite3
+/media/
+staticfiles/
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore secret settings
+.env
+config/settings/local.py
+
+# Django migrations
+*/migrations/*  
+!*/migrations/__init__.py
+
+# Ignore IDE / editor config files
+.vscode/
+.idea/
+*.iml
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore compiled/static files
+static/
+staticfiles/
+node_modules/
+
+# Ignore pip environment files
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore coverage and test files
+.coverage
+htmlcov/
+*.cover
+*.py,cover
+.tox/
+.nox/
+pytest_cache/
