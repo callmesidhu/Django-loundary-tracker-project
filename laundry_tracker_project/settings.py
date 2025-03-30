@@ -37,12 +37,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "home",
     "accounts",
     "loading_start",
     "loading_end",
     "unloading_start",
     "unloading_end",
-    "packing",
+    "packing", 
     "nursing_station",
     "task_schedule",
 ]
@@ -62,7 +63,7 @@ ROOT_URLCONF = "laundry_tracker_project.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": ["templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
