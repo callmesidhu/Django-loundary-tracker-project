@@ -1,59 +1,69 @@
-# Byte-compiled / optimized / DLL files
+# Ignore Python compiled files
 __pycache__/
 *.py[cod]
 *$py.class
 
-# Virtual environment
-venv/
-env/
-*.env
-*.venv
-
-# Django-related
-db.sqlite3
-*.sqlite3
-/media/
-staticfiles/
-*.log
-*.pot
-*.pyc
-*.pyo
-*.pyd
-
-# Ignore secret settings
+# Ignore Django secret key file (if any)
 .env
-config/settings/local.py
+*.env
 
-# Django migrations
-*/migrations/*  
-!*/migrations/__init__.py
+# Ignore Django migrations (optional, if you want to track only models)
+**/migrations/*.py
+!**/migrations/__init__.py
 
-# Ignore IDE / editor config files
+# Ignore database files
+*.sqlite3
+db.sqlite3
+*.db
+
+# Ignore IDE/editor-specific files
 .vscode/
 .idea/
-*.iml
+*.swp
+*.swo
 
-# Ignore system files
-.DS_Store
-Thumbs.db
+# Ignore Virtual Environment
+venv/
+env/
+.venv/
 
-# Ignore compiled/static files
-static/
+# Ignore static and media files (if generated dynamically)
 staticfiles/
+media/
+static/
+mediafiles/
+
+# Ignore logs and cache
+*.log
+*.pot
+*.pid
+*.seed
+*.csv
+*.out
+*.pdf
+*.mp4
+*.zip
+*.tar.gz
+
+# Ignore compiled CSS/JS (if using Tailwind or Webpack)
 node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
 
-# Ignore pip environment files
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Ignore Jupyter Notebook checkpoints
-.ipynb_checkpoints/
-
-# Ignore coverage and test files
-.coverage
+# Ignore coverage reports
 htmlcov/
-*.cover
-*.py,cover
+.coverage
 .tox/
 .nox/
 pytest_cache/
+coverage.xml
+nosetests.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# Ignore Docker and deployment files (if using)
+docker-compose.override.yml
+instance/
+.deploy/
