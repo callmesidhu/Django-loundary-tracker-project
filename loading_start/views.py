@@ -1,3 +1,4 @@
 from django.shortcuts import render
 
-# Create your views here.
+def loading_start(request):
+    return render(request, "loading_start.html")
