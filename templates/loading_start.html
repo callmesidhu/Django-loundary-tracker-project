@@ -1,6 +1,41 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 class="text-3xl font-bold text-blue-600">Welcome to My Website</h1>
-    <p class="mt-4 text-gray-700">This is the home page.</p>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<body class="bg-gray-100">
+  <div class="min-h-screen flex flex-col items-center justify-center py-10">
+    <h1 class="text-3xl font-bold text-center mb-2">Loading Point A</h1>
+    <p class="text-center text-gray-500 mb-6">Scan QR code to register laundry items</p>
+
+    <!-- Card Container -->
+    <div class="bg-white rounded-lg shadow p-8 w-full max-w-xl flex flex-col items-center">
+      <!-- Scanner Frame -->
+      <div class="border-4 border-blue-500 w-80 h-80 flex items-center justify-center">
+        <div id="reader" style="width: 320px;"></div>
+      </div>
+      <p class="mt-4 text-gray-600">Position QR code in the frame</p>
+    </div>
+  </div>
+
+  <!-- Script to initialize the scanner -->
+  <script>
+    function onScanSuccess(decodedText, decodedResult) {
+      console.log(`Code matched = ${decodedText}`, decodedResult);
+      // TODO: Handle successful scan (e.g., redirect, display info, etc.)
+    }
+
+    function onScanError(errorMessage) {
+      // Optionally log or display errors
+      console.warn(errorMessage);
+    }
+
+    // Initialize the scanner
+    let html5QrcodeScanner = new Html5QrcodeScanner(
+      "reader", 
+      { fps: 10, qrbox: 250 },
+      false
+    );
+    html5QrcodeScanner.render(onScanSuccess, onScanError);
+  </script>
+</body>
 {% endblock %}
