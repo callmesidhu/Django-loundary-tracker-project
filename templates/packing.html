@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Packing | My Website</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
+{% extends "base.html" %}
+
+{% block title %}Home - MySite{% endblock %}
+
+{% block content %}
 <body class="bg-gray-100">
     <header class="bg-blue-600 text-white py-4">
         <nav class="container mx-auto flex justify-between items-center px-6">
@@ -38,4 +35,4 @@
         <p>&copy; 2025 Packing Section. All rights reserved.</p>
     </footer>
 </body>
-</html>
+{% endblock %}

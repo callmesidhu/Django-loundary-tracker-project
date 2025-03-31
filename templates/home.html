@@ -1,47 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home | My Website</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
-    <header class="bg-blue-600 text-white py-4">
-        <nav class="container mx-auto flex justify-between items-center px-6">
-            <h1 class="text-xl font-bold">My Website</h1>
-            <ul class="flex space-x-6">
-                <li><a href="#home" class="hover:underline">Home</a></li>
-                <li><a href="#about" class="hover:underline">About</a></li>
-                <li><a href="#services" class="hover:underline">Services</a></li>
-                <li><a href="#contact" class="hover:underline">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
-    
-    <section id="home" class="hero text-center py-20 bg-blue-500 text-white">
-        <h1 class="text-4xl font-bold">Welcome to My Website</h1>
-        <p class="mt-4 text-lg">Your one-stop solution for all your needs.</p>
-        <a href="#services" class="mt-6 inline-block bg-white text-blue-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-200">Explore Services</a>
-    </section>
-    
-    <section id="about" class="py-16 container mx-auto px-6 text-center">
-        <h2 class="text-3xl font-bold">About Us</h2>
-        <p class="mt-4 text-gray-600">We are dedicated to providing the best solutions to our customers.</p>
-    </section>
-    
-    <section id="services" class="py-16 bg-gray-200 text-center">
-        <h2 class="text-3xl font-bold">Our Services</h2>
-        <p class="mt-4 text-gray-700">Check out the range of services we offer.</p>
-    </section>
-    
-    <section id="contact" class="py-16 container mx-auto px-6 text-center">
-        <h2 class="text-3xl font-bold">Contact Us</h2>
-        <p class="mt-4 text-gray-600">Get in touch for more information.</p>
-    </section>
-    
-    <footer class="bg-blue-600 text-white text-center py-4">
-        <p>&copy; 2025 My Website. All rights reserved.</p>
-    </footer>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Home - MySite{% endblock %}
+
+{% block content %}
+    <h1 class="text-3xl font-bold text-blue-600">Welcome to My Website</h1>
+    <p class="mt-4 text-gray-700">This is the home page.</p>
+{% endblock %}
