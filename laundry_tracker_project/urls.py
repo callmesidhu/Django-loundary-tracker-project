@@ -12,4 +12,5 @@ urlpatterns = [
     path("task-schedule/", include("task_schedule.urls")),
     path("packing/", include("packing.urls")),
     path("accounts/", include("accounts.urls")),
+    
 ]

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hospital Laundry Tracker</title>
+  <title>Hospital Laundry Tracker - Logged Out</title>
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Custom Animations -->
@@ -53,21 +53,16 @@
           <a href="/task-schedule" class="px-3 py-2 rounded-md hover:text-blue-700 transition-colors">Task Schedule</a>
           <a href="/nursing-station" class="px-3 py-2 rounded-md hover:text-blue-700 transition-colors">Nursing Station</a>
           <a href="/loading-start" class="px-3 py-2 rounded-md hover:text-blue-700 transition-colors">Loading A</a>
-          <a href="/unloading-start" class="px-3 py-2 rounded-md hover:text-blue-700 transition-colors">unloading A</a>
+          <a href="/unloading-start" class="px-3 py-2 rounded-md hover:text-blue-700 transition-colors">Unloading A</a>
           <a href="/loading-end" class="px-3 py-2 rounded-md hover:text-blue-700 transition-colors">Loading B</a>
           <a href="/unloading-end" class="px-3 py-2 rounded-md hover:text-blue-700 transition-colors">Unloading B</a>
           <a href="/packing" class="px-3 py-2 rounded-md hover:text-blue-700 transition-colors">Packing</a>
         </div>
         
-        <!-- Right section (user icon, desktop only) -->
+        <!-- Right section (desktop only logout) -->
         <div class="hidden md:flex items-center space-x-4">
-          <button class="focus:outline-none hover:text-blue-700 p-2 rounded-md transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" 
-                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M5.121 17.804A7.25 7.25 0 0112 14.75a7.25 7.25 0 016.879 3.054M15 11.75A3 3 0 1112 8.75a3 3 0 013 3z"/>
-            </svg>
-          </button>
+          <!-- Logout link that will also be handled server-side -->
+          <a href="{% url 'logout' %}" class="px-6 py-1 hover:text-blue-700 transition-colors bg-slate-200 rounded-3xl">Logout</a>
         </div>
 
         <!-- Mobile menu button (hamburger) -->
@@ -83,7 +78,6 @@
             </svg>
           </button>
         </div>
-
       </div>
     </div>
 
@@ -92,25 +86,18 @@
       <a href="/task-schedule" class="block px-4 py-2 text-black hover:text-blue-700">Task Schedule</a>
       <a href="/nursing-station" class="block px-4 py-2 text-black hover:text-blue-700">Nursing Station</a>
       <a href="/loading-start" class="block px-4 py-2 text-black hover:text-blue-700">Loading A</a>
-      <a href="/unloading-start" class="block px-4 py-2 text-black hover:text-blue-700">unloading A</a>
+      <a href="/unloading-start" class="block px-4 py-2 text-black hover:text-blue-700">Unloading A</a>
       <a href="/loading-end" class="block px-4 py-2 text-black hover:text-blue-700">Loading B</a>
       <a href="/unloading-end" class="block px-4 py-2 text-black hover:text-blue-700">Unloading B</a>
       <a href="/packing" class="block px-4 py-2 text-black hover:text-blue-700">Packing</a>
-      <!-- Mobile User Icon -->
-      <a href="#" class=" px-4 py-2 text-black hover:text-blue-700 flex items-center space-x-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="M5.121 17.804A7.25 7.25 0 0112 14.75a7.25 7.25 0 016.879 3.054M15 11.75A3 3 0 1112 8.75a3 3 0 013 3z"/>
-        </svg>
-        <span>User Profile</span>
-      </a>
-    </div>
+      <!-- Mobile Logout Button -->
+      <a href="{% url 'logout' %}" class="px-6 py-1 hover:text-blue-700 transition-colors bg-slate-200 rounded-3xl">Logout</a>
+</div>
   </nav>
 
-  <!-- Main Page Content -->
-  {% block content %}
-  {% endblock %}
+   <!-- Main Page Content -->
+   {% block content %}
+   {% endblock %}
 
   <!-- Toggle Mobile Menu Script -->
   <script>
@@ -128,6 +115,10 @@
         }, 300);
       }
     }
+    // Clear browser sessionStorage on page load
+    window.addEventListener('load', function() {
+      sessionStorage.clear();
+    });
   </script>
 
 </body>

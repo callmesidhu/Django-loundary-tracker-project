@@ -1,9 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Employee
+from django.contrib.auth import logout as django_logout
 
 def accounts(request):
     return render(request, "accounts.html")
+
+def logout(request):
+    django_logout(request)
+    request.session['logged_in'] = False  
+    return redirect('/')  # Redirect to homepage or login page
 
 def login(request):
     if request.method == "POST":
