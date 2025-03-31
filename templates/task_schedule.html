@@ -1,41 +1,215 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Schedule | My Website</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
-    <header class="bg-blue-600 text-white py-4">
-        <nav class="container mx-auto flex justify-between items-center px-6">
-            <h1 class="text-xl font-bold">Task Schedule</h1>
-            <ul class="flex space-x-6">
-                <li><a href="index.html" class="hover:underline">Home</a></li>
-                <li><a href="#tasks" class="hover:underline">Tasks</a></li>
-                <li><a href="#calendar" class="hover:underline">Calendar</a></li>
-                <li><a href="#reminders" class="hover:underline">Reminders</a></li>
-            </ul>
-        </nav>
-    </header>
+{% extends "base.html" %}
+{% block content %}
+<div class="min-h-screen bg-gray-100 flex flex-col items-center py-10">
+  <!-- Page Title -->
+  <h1 class="text-3xl font-bold text-blue-600">Task Schedule</h1>
+  <p class="mt-2 text-gray-700">Calendar</p>
+
+  <!-- Calendar & Tasks Card -->
+  <div class="mt-10 w-full max-w-lg bg-white rounded-lg shadow p-6">
+    <!-- Calendar Header with Navigation -->
+    <div class="flex items-center justify-between">
+      <button id="prev-month" class="text-blue-600 hover:text-blue-800 focus:outline-none">&larr;</button>
+      <h2 id="month-year" class="text-xl font-bold"></h2>
+      <button id="next-month" class="text-blue-600 hover:text-blue-800 focus:outline-none">&rarr;</button>
+    </div>
+
+    <!-- Days of the Week -->
+    <div class="grid grid-cols-7 gap-2 mt-4 text-center text-gray-400">
+      <div>Sun</div>
+      <div>Mon</div>
+      <div>Tue</div>
+      <div>Wed</div>
+      <div>Thu</div>
+      <div>Fri</div>
+      <div>Sat</div>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div id="calendar-container" class="grid grid-cols-7 gap-2 mt-2 text-center transition-opacity duration-300">
+      <!-- Calendar dates are inserted here by JS -->
+    </div>
+
+    <!-- Task List Heading -->
+    <h3 id="task-header" class="text-lg font-bold mt-6 text-center"></h3>
+
+    <!-- Task Items -->
+    <div id="task-list" class="mt-4 space-y-4">
+      <!-- Tasks will be rendered here -->
+    </div>
+  </div>
+</div>
+
+<script>
+// Sample tasks data keyed by date (YYYY-MM-DD)
+const tasksData = {
+  "2025-03-01": [
+    { task: "Team Meeting", status: "Pending", time: "09:00" }
+  ],
+  "2025-03-28": [
+    { task: "Washing", status: "Pending", time: "8:00" },
+    { task: "Drying", status: "Pending", time: "10:00" },
+    { task: "Folding", status: "Completed", time: "12:00" }
+  ],
+  "2025-03-31": [
+    { task: "Review Reports", status: "Pending", time: "14:00" }
+  ]
+};
+
+let currentDate = new Date(2025, 2, 1); // March 2025 (month is 0-indexed)
+let selectedDay = null;
+
+// Update month/year header
+function updateHeader(month, year) {
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  document.getElementById('month-year').textContent = `${monthNames[month]} ${year}`;
+}
+
+// Render tasks for a selected date (format: YYYY-MM-DD)
+function updateTasks(dateStr) {
+  const header = document.getElementById('task-header');
+  const taskList = document.getElementById('task-list');
+
+  header.textContent = `Tasks for ${dateStr}`;
+  taskList.innerHTML = '';
+  
+  const tasks = tasksData[dateStr] || [];
+  if (tasks.length === 0) {
+    taskList.innerHTML = `<p class="text-center text-gray-500">No tasks scheduled for this day.</p>`;
+    return;
+  }
+  
+  tasks.forEach((item, index) => {
+    const taskDiv = document.createElement('div');
+    taskDiv.className = index < tasks.length - 1 
+      ? 'flex items-center justify-between border-b border-gray-200 pb-2' 
+      : 'flex items-center justify-between';
+    taskDiv.innerHTML = `
+      <div>
+        <p class="font-semibold">${item.task}</p>
+        <p class="text-sm ${item.status === 'Completed' ? 'text-green-500' : 'text-gray-500'}">${item.status}</p>
+      </div>
+      <p class="text-gray-600">${item.time}</p>
+    `;
+    taskList.appendChild(taskDiv);
+  });
+}
+
+// Render the calendar grid for the given month and year
+function renderCalendar(month, year) {
+  const calendarContainer = document.getElementById('calendar-container');
+  
+  // Fade out before re-rendering
+  calendarContainer.classList.add('opacity-0');
+  
+  // Delay to allow fade-out animation
+  setTimeout(() => {
+    calendarContainer.innerHTML = ''; // Clear previous cells
+    updateHeader(month, year);
+
+    // Determine first day of the month and number of days in month
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    // Create blank cells for days before the first day
+    for (let i = 0; i < firstDay; i++) {
+      const emptyCell = document.createElement('div');
+      emptyCell.className = "text-gray-200 p-2";
+      calendarContainer.appendChild(emptyCell);
+    }
+
+    // Create a cell for each day
+    for (let day = 1; day <= daysInMonth; day++) {
+      const cell = document.createElement('div');
+      cell.className = "cursor-pointer hover:bg-blue-50 p-2 rounded transition-colors duration-200 flex flex-col items-center";
+      cell.textContent = day;
+      cell.dataset.day = day;
+      cell.dataset.month = month;
+      cell.dataset.year = year;
+      
+      // Format date string for lookup (YYYY-MM-DD)
+      const formattedDate = `${year}-${(month+1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+
+      // If tasks exist for this date, add a dot indicator
+      if (tasksData[formattedDate] && tasksData[formattedDate].length > 0) {
+        const dot = document.createElement('div');
+        dot.className = "w-2 h-2 bg-blue-600 rounded-full mt-1";
+        cell.appendChild(dot);
+      }
+
+      // Highlight if this is the selected day
+      if (
+        selectedDay &&
+        selectedDay.day === day &&
+        selectedDay.month === month &&
+        selectedDay.year === year
+      ) {
+        cell.classList.add('bg-blue-100', 'text-blue-600', 'font-semibold');
+      }
+
+      cell.addEventListener('click', function() {
+        // Remove highlight from all cells
+        document.querySelectorAll('#calendar-container [data-day]').forEach(el => {
+          el.classList.remove('bg-blue-100', 'text-blue-600', 'font-semibold');
+        });
+        // Highlight the clicked cell
+        cell.classList.add('bg-blue-100', 'text-blue-600', 'font-semibold');
+        selectedDay = { day, month, year };
+        updateTasks(formattedDate);
+      });
+
+      calendarContainer.appendChild(cell);
+    }
     
-    <section id="tasks" class="py-16 container mx-auto px-6 text-center">
-        <h2 class="text-3xl font-bold">Task Management</h2>
-        <p class="mt-4 text-gray-600">Organize and manage your tasks efficiently.</p>
-    </section>
-    
-    <section id="calendar" class="py-16 bg-gray-200 text-center">
-        <h2 class="text-3xl font-bold">Calendar</h2>
-        <p class="mt-4 text-gray-700">View your scheduled tasks and deadlines.</p>
-    </section>
-    
-    <section id="reminders" class="py-16 container mx-auto px-6 text-center">
-        <h2 class="text-3xl font-bold">Reminders</h2>
-        <p class="mt-4 text-gray-600">Set reminders to never miss important tasks.</p>
-    </section>
-    
-    <footer class="bg-blue-600 text-white text-center py-4">
-        <p>&copy; 2025 Task Schedule. All rights reserved.</p>
-    </footer>
-</body>
-</html>
+    // Fade in after re-rendering
+    calendarContainer.classList.remove('opacity-0');
+  }, 200); // Adjust delay as needed
+}
+
+// Event listeners for month navigation
+document.getElementById('prev-month').addEventListener('click', () => {
+  let month = currentDate.getMonth();
+  let year = currentDate.getFullYear();
+  if (month === 0) {
+    month = 11;
+    year--;
+  } else {
+    month--;
+  }
+  currentDate = new Date(year, month, 1);
+  // Optionally reset selected day for new month
+  selectedDay = null;
+  updateTasks(`${year}-${(month+1).toString().padStart(2, '0')}-01`);
+  renderCalendar(month, year);
+});
+
+document.getElementById('next-month').addEventListener('click', () => {
+  let month = currentDate.getMonth();
+  let year = currentDate.getFullYear();
+  if (month === 11) {
+    month = 0;
+    year++;
+  } else {
+    month++;
+  }
+  currentDate = new Date(year, month, 1);
+  // Optionally reset selected day for new month
+  selectedDay = null;
+  updateTasks(`${year}-${(month+1).toString().padStart(2, '0')}-01`);
+  renderCalendar(month, year);
+});
+
+// Initialize calendar with the current month and default selection on the 1st day
+(function initCalendar() {
+  const month = currentDate.getMonth();
+  const year = currentDate.getFullYear();
+  selectedDay = { day: 1, month, year };
+  renderCalendar(month, year);
+  const formattedDate = `${year}-${(month+1).toString().padStart(2, '0')}-01`;
+  updateTasks(formattedDate);
+})();
+</script>
+{% endblock %}

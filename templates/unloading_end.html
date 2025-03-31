@@ -1,16 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unloading Start | My Website</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-    <div class="text-center">
-        <h1 class="text-4xl font-bold text-blue-600">Unloading end new</h1>
-        <p class="mt-4 text-lg text-gray-700">Please wait while the unloading process is in progress.</p>
-        <div class="mt-6 animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 border-opacity-50"></div>
-    </div>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="text-3xl font-bold text-blue-600">Welcome to My Website</h1>
+    <p class="mt-4 text-gray-700">This is the home page.</p>
+{% endblock %}
