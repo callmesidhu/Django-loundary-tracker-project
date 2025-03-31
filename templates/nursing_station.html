@@ -20,6 +20,7 @@
             name="quantity"
             placeholder="Enter quantity"
             class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+            required
           />
           <!-- Optional icon or dropdown arrow can be added here if needed -->
         </div>
@@ -29,16 +30,23 @@
       <div class="mb-4">
         <label for="clothes-type" class="block font-semibold mb-1">Type of Clothes</label>
         <select
-          id="clothes-type"
-          name="clothes_type"
-          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
-        >
-          <option value="">Select clothes type</option>
-          <!-- Add more options as needed -->
-          <option value="uniform">Uniform</option>
-          <option value="bedding">Bedding</option>
-          <option value="misc">Miscellaneous</option>
-        </select>
+                id="clothes-type"
+                name="clothes_type"
+                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                required
+                >
+                <option value="">Select clothes type</option>
+                <option value="bed_sheets">Bed Sheets</option>
+                <option value="pillowcases">Pillowcases</option>
+                <option value="blankets">Blankets</option>
+                <option value="towels">Towels</option>
+                <option value="patient_gowns">Patient Gowns</option>
+                <option value="staff_uniforms">Staff Uniforms</option>
+                <option value="surgical_drapes">Surgical Drapes</option>
+                <option value="privacy_curtains">Privacy Curtains</option>
+                <option value="other">Other</option>
+                </select>
+
       </div>
       
       <!-- State of Clothes -->

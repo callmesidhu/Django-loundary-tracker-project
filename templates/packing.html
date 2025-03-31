@@ -1,6 +1,59 @@
 {% extends "base.html" %}
-
 {% block content %}
-    <h1 class="text-3xl font-bold text-blue-600">Welcome to My Website</h1>
-    <p class="mt-4 text-gray-700">This is the home page.</p>
+<div class="min-h-screen bg-gray-100 flex items-center justify-center py-10">
+  <!-- Card Container -->
+  <div class="w-full max-w-md bg-white rounded-lg shadow p-8">
+    <!-- Heading -->
+    <h1 class="text-2xl font-bold text-center mb-2">Packing Station</h1>
+    <!-- Subheading -->
+    <p class="text-center text-gray-500 mb-6">Register packed laundry items</p>
+    
+    <!-- Form -->
+    <form>
+      <!-- Number of Clothes -->
+      <div class="mb-4">
+        <label for="quantity" class="block font-semibold mb-1">Number of Clothes</label>
+        <input
+          type="number"
+          id="quantity"
+          name="quantity"
+          placeholder="Enter quantity"
+          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+          required
+        />
+      </div>
+      
+      <!-- Type of Clothes -->
+      <div class="mb-4">
+        <label for="clothes-type" class="block font-semibold mb-1">Type of Clothes</label>
+        <select
+                id="clothes-type"
+                name="clothes_type"
+                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                required
+                >
+                <option value="">Select clothes type</option>
+                <option value="bed_sheets">Bed Sheets</option>
+                <option value="pillowcases">Pillowcases</option>
+                <option value="blankets">Blankets</option>
+                <option value="towels">Towels</option>
+                <option value="patient_gowns">Patient Gowns</option>
+                <option value="staff_uniforms">Staff Uniforms</option>
+                <option value="surgical_drapes">Surgical Drapes</option>
+                <option value="privacy_curtains">Privacy Curtains</option>
+                <option value="other">Other</option>
+                </select>
+
+      </div>
+      
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors"
+      >
+        Generate QR Code
+      </button>
+    </form>
+  </div>
+</div>
 {% endblock %}
