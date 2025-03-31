@@ -1,16 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading Complete | My Website</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-    <div class="text-center">
-        <h1 class="text-4xl font-bold text-blue-600">Loading Complete</h1>
-        <p class="mt-4 text-lg text-gray-700">Thank you for your patience. The process is now complete.</p>
-        <a href="index.html" class="mt-6 inline-block bg-blue-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-700">Return to Home</a>
-    </div>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="text-3xl font-bold text-blue-600">Welcome to My Website</h1>
+    <p class="mt-4 text-gray-700">This is the home page.</p>
+{% endblock %}
