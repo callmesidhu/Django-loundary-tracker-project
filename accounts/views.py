@@ -7,8 +7,9 @@ def accounts(request):
     return render(request, "accounts.html")
 
 def logout(request):
-    django_logout(request)
-    request.session['logged_in'] = False  
+    django_logout(request)  # Django's built-in logout
+    request.session.flush()  # Clears all session data
+    messages.success(request, "You have been logged out.")  # Optional success message
     return redirect('/')  # Redirect to homepage or login page
 
 def login(request):

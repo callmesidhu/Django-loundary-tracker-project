@@ -9,7 +9,7 @@
     <p class="text-center text-gray-500 mb-6">Register laundry for processing</p>
     
     <!-- Form -->
-    <form>
+    <form id="laundryForm">
       <!-- Number of Clothes -->
       <div class="mb-4">
         <label for="quantity" class="block font-semibold mb-1">Number of Clothes</label>
@@ -22,7 +22,6 @@
             class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
             required
           />
-          <!-- Optional icon or dropdown arrow can be added here if needed -->
         </div>
       </div>
       
@@ -30,23 +29,22 @@
       <div class="mb-4">
         <label for="clothes-type" class="block font-semibold mb-1">Type of Clothes</label>
         <select
-                id="clothes-type"
-                name="clothes_type"
-                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
-                required
-                >
-                <option value="">Select clothes type</option>
-                <option value="bed_sheets">Bed Sheets</option>
-                <option value="pillowcases">Pillowcases</option>
-                <option value="blankets">Blankets</option>
-                <option value="towels">Towels</option>
-                <option value="patient_gowns">Patient Gowns</option>
-                <option value="staff_uniforms">Staff Uniforms</option>
-                <option value="surgical_drapes">Surgical Drapes</option>
-                <option value="privacy_curtains">Privacy Curtains</option>
-                <option value="other">Other</option>
-                </select>
-
+          id="clothes-type"
+          name="clothes_type"
+          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+          required
+        >
+          <option value="">Select clothes type</option>
+          <option value="bed_sheets">Bed Sheets</option>
+          <option value="pillowcases">Pillowcases</option>
+          <option value="blankets">Blankets</option>
+          <option value="towels">Towels</option>
+          <option value="patient_gowns">Patient Gowns</option>
+          <option value="staff_uniforms">Staff Uniforms</option>
+          <option value="surgical_drapes">Surgical Drapes</option>
+          <option value="privacy_curtains">Privacy Curtains</option>
+          <option value="other">Other</option>
+        </select>
       </div>
       
       <!-- State of Clothes -->
@@ -59,6 +57,7 @@
               name="state"
               value="non-infected"
               class="mr-2 focus:ring-0"
+              required
             />
             <span>Non-Infected</span>
           </label>
@@ -68,6 +67,7 @@
               name="state"
               value="infected"
               class="mr-2 focus:ring-0"
+              required
             />
             <span>Infected</span>
           </label>
@@ -77,6 +77,7 @@
               name="state"
               value="highly-stained-infected"
               class="mr-2 focus:ring-0"
+              required
             />
             <span>Highly Stained &amp; Infected</span>
           </label>
@@ -86,6 +87,7 @@
               name="state"
               value="less-stained"
               class="mr-2 focus:ring-0"
+              required
             />
             <span>Less Stained</span>
           </label>
@@ -102,4 +104,56 @@
     </form>
   </div>
 </div>
+
+<!-- Modal Popup for the QR Code -->
+<div id="modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 hidden">
+  <div class="bg-white rounded-lg shadow-lg p-8 relative max-w-xs w-full">
+    <button id="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+    <h1 class=" text-green-500 text-lg font-bold text-center mb-5">QR Code generated Successfully!</h1>
+
+    <div id="qrcodeModal" class="flex justify-center mb-4"></div>
+
+  </div>
+</div>
+
+<!-- Include QRCode.js library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+document.getElementById('laundryForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form from submitting normally
+    
+    // Gather form values
+    var quantity = document.getElementById('quantity').value;
+    var clothesType = document.getElementById('clothes-type').value;
+    var state = document.querySelector('input[name="state"]:checked').value;
+
+    // Create JSON object with form data
+    var data = {
+        "Number of Clothes": quantity,
+        "Type of Clothes": clothesType,
+        "State of Clothes": state
+    };
+
+    // Convert the JSON object to a string
+    var jsonString = JSON.stringify(data);
+
+    // Clear any previous QR code in the modal
+    document.getElementById('qrcodeModal').innerHTML = '';
+
+    // Generate the QR Code with the JSON string
+    new QRCode(document.getElementById('qrcodeModal'), {
+        text: jsonString,
+        width: 200,
+        height: 200
+    });
+
+    // Show the modal pop-up
+    document.getElementById('modal').classList.remove('hidden');
+});
+
+// Close the modal when the close button is clicked
+document.getElementById('closeModal').addEventListener('click', function() {
+    document.getElementById('modal').classList.add('hidden');
+});
+</script>
 {% endblock %}
