@@ -42,21 +42,9 @@
 
 <script>
 // Sample tasks data keyed by date (YYYY-MM-DD)
-const tasksData = {
-  "2025-03-01": [
-    { task: "Team Meeting", status: "Pending", time: "09:00" }
-  ],
-  "2025-03-28": [
-    { task: "Washing", status: "Pending", time: "8:00" },
-    { task: "Drying", status: "Pending", time: "10:00" },
-    { task: "Folding", status: "Completed", time: "12:00" }
-  ],
-  "2025-03-31": [
-    { task: "Review Reports", status: "Pending", time: "14:00" }
-  ]
-};
+const tasksData = JSON.parse('{{ tasks_data|escapejs }}');
 
-let currentDate = new Date(2025, 2, 1); // March 2025 (month is 0-indexed)
+let currentDate = new Date(); // Initialize with today's date
 let selectedDay = null;
 
 // Update month/year header
@@ -69,11 +57,16 @@ function updateHeader(month, year) {
 }
 
 // Render tasks for a selected date (format: YYYY-MM-DD)
+// This version converts the date to DD-MM-YYYY in the header.
 function updateTasks(dateStr) {
   const header = document.getElementById('task-header');
   const taskList = document.getElementById('task-list');
 
-  header.textContent = `Tasks for ${dateStr}`;
+  // Convert dateStr from YYYY-MM-DD to DD-MM-YYYY
+  const parts = dateStr.split('-');
+  const formattedDate = `${parts[2].padStart(2, '0')}-${parts[1].padStart(2, '0')}-${parts[0]}`;
+  header.textContent = `Tasks for ${formattedDate}`;
+
   taskList.innerHTML = '';
   
   const tasks = tasksData[dateStr] || [];
@@ -202,13 +195,14 @@ document.getElementById('next-month').addEventListener('click', () => {
   renderCalendar(month, year);
 });
 
-// Initialize calendar with the current month and default selection on the 1st day
+// Initialize calendar with today's date and default selection on today's date
 (function initCalendar() {
-  const month = currentDate.getMonth();
-  const year = currentDate.getFullYear();
-  selectedDay = { day: 1, month, year };
+  let month = currentDate.getMonth();
+  let year = currentDate.getFullYear();
+  let day = currentDate.getDate();
+  selectedDay = { day, month, year };
   renderCalendar(month, year);
-  const formattedDate = `${year}-${(month+1).toString().padStart(2, '0')}-01`;
+  const formattedDate = `${year}-${(month+1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
   updateTasks(formattedDate);
 })();
 </script>
