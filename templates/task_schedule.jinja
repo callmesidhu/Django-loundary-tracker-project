@@ -27,7 +27,7 @@
 
     <!-- Calendar Grid -->
     <div id="calendar-container" class="grid grid-cols-7 gap-2 mt-2 text-center transition-opacity duration-300">
-      <!-- Calendar dates are inserted here by JS -->
+      <!-- Calendar dates are inserted here by JavaScript -->
     </div>
 
     <!-- Task List Heading -->
@@ -41,7 +41,7 @@
 </div>
 
 <script>
-// Sample tasks data keyed by date (YYYY-MM-DD)
+// Parse the tasks_data passed from the Django view
 const tasksData = JSON.parse('{{ tasks_data|escapejs }}');
 
 let currentDate = new Date(); // Initialize with today's date
