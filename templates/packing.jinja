@@ -61,38 +61,83 @@
   <div class="bg-white rounded-lg shadow-lg p-8 relative max-w-xs w-full">
     <button id="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
     <h1 class="text-green-500 text-lg font-bold text-center mb-5">QR Code generated Successfully!</h1>
-    <div id="qrcodeModal" class="flex justify-center mb-4"></div>
+    <div id="qrcodeModal" class="flex justify-center mb-2"></div>
+    <!-- Display the UUID below the QR code -->
+    <p id="uuidDisplay" class="text-center font-semibold mb-4"></p>
+    <button id="downloadQR" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition-colors mb-2">Download QR Code</button>
+    <button id="updateTask" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors">Update Task</button>
   </div>
 </div>
 
 <!-- Include QRCode.js library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
+// Helper function to get CSRF token from cookies
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    let cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      let cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+// Global variable to store the UUID value
+var uuidValue = "";
+
+// Function to get UUID from query parameter if available
+function getUUIDFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("uuid");
+}
+
+// Check if a UUID is present in the URL
+var urlUUID = getUUIDFromURL();
+if (urlUUID) {
+  // Remove any trailing slash from the UUID
+  uuidValue = urlUUID.replace(/\/+$/, "");
+}
+
 document.getElementById('packingForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent form from submitting normally
+    event.preventDefault(); // Prevent the default form submission
     
     // Gather form values
     var quantity = document.getElementById('quantity').value;
     var clothesType = document.getElementById('clothes-type').value;
+    
+    // If no UUID was provided in the URL, generate a new 5-digit UUID
+    if (!uuidValue) {
+      uuidValue = Math.floor(10000 + Math.random() * 90000).toString();
+    }
 
-    // Create JSON object with form data
+    // Create JSON object with form data and UUID
     var data = {
+        "UUID": uuidValue,
         "Number of Clothes": quantity,
         "Type of Clothes": clothesType
     };
 
-    // Convert the JSON object to a string
+    // Convert the JSON object to a string for the QR code
     var jsonString = JSON.stringify(data);
 
     // Clear any previous QR code in the modal
     document.getElementById('qrcodeModal').innerHTML = '';
 
-    // Generate the QR Code with the JSON string
+    // Generate the QR Code using the QRCode.js library
     new QRCode(document.getElementById('qrcodeModal'), {
         text: jsonString,
         width: 200,
         height: 200
     });
+
+    // Display the UUID below the QR code without any trailing slash
+    document.getElementById('uuidDisplay').textContent = "UUID: " + uuidValue;
 
     // Show the modal pop-up
     document.getElementById('modal').classList.remove('hidden');
@@ -101,6 +146,47 @@ document.getElementById('packingForm').addEventListener('submit', function(event
 // Close the modal when the close button is clicked
 document.getElementById('closeModal').addEventListener('click', function() {
     document.getElementById('modal').classList.add('hidden');
+});
+
+// Download the QR code image when the download button is clicked
+document.getElementById('downloadQR').addEventListener('click', function() {
+    var qrContainer = document.getElementById('qrcodeModal');
+    var qrImg = qrContainer.querySelector('img');
+    if (qrImg) {
+        var link = document.createElement('a');
+        link.href = qrImg.src;
+        link.download = 'qr-code.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } else {
+        alert("QR Code image not found!");
+    }
+});
+
+// Update task using the generated UUID when the update button is clicked
+document.getElementById('updateTask').addEventListener('click', function() {
+    fetch('/packing/update/', { 
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body: JSON.stringify({ uuid: uuidValue })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === "success") {
+          alert("Task updated successfully!");
+          window.location.href = "/task-schedule/";
+        } else {
+          alert("Error updating task: " + data.message);
+        }
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        alert("An error occurred.");
+      });
 });
 </script>
 {% endblock %}
