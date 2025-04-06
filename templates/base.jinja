@@ -62,7 +62,7 @@
         <!-- Right section (desktop only logout) -->
         <div class="hidden md:flex items-center space-x-4">
           <!-- Logout link that will also be handled server-side -->
-          <a href="{% url 'logout' %}" class="px-6 py-1 hover:text-blue-700 transition-colors bg-slate-200 rounded-3xl">Logout</a>
+          <a href="{{ url('logout') }}" class="px-6 py-1 hover:text-blue-700 transition-colors bg-slate-200 rounded-3xl">Logout</a>
         </div>
 
         <!-- Mobile menu button (hamburger) -->
@@ -91,7 +91,7 @@
       <a href="/unloading-end" class="block px-4 py-2 text-black hover:text-blue-700">Unloading B</a>
       <a href="/packing" class="block px-4 py-2 text-black hover:text-blue-700">Packing</a>
       <!-- Mobile Logout Button -->
-      <a href="{% url 'logout' %}" class="px-6 py-1 hover:text-blue-700 transition-colors bg-slate-200 rounded-3xl">Logout</a>
+      <a href="{{ url('logout') }}" class="px-6 py-1 hover:text-blue-700 transition-colors bg-slate-200 rounded-3xl">Logout</a>
 </div>
   </nav>
 

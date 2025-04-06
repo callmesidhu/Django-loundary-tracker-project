@@ -20,4 +20,4 @@ def task_schedule(request):
 
     # Pass tasks_data as a JSON object to the template.
     context = {'tasks_data': json.dumps(tasks_data)}
-    return render(request, 'task_schedule.html', context)
+    return render(request, 'task_schedule.jinja', context)

@@ -37,10 +37,13 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "laundry_tracker_project.urls"
 
+# Configure two template engines:
+# 1. DjangoTemplates for the admin and other parts that require it.
+# 2. Jinja2 for your application templates, stored in the existing "templates" folder.
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": ["templates"],
+        "DIRS": [],  # Django admin uses its built-in templates.
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -49,6 +52,14 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
+        },
+    },
+    {
+        "BACKEND": "django.template.backends.jinja2.Jinja2",
+        "DIRS": [BASE_DIR / "templates"],  # Use the existing templates directory for Jinja2.
+        "APP_DIRS": False,  # Jinja2 doesn't auto-load templates from app directories.
+        "OPTIONS": {
+            "environment": "laundry_tracker_project.jinja2.environment",
         },
     },
 ]

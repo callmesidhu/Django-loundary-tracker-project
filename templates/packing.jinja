@@ -1,28 +1,26 @@
-{% extends "base.html" %}
+{% extends "base.jinja" %}
 {% block content %}
 <div class="min-h-screen bg-gray-100 flex items-center justify-center py-10">
   <!-- Card Container -->
   <div class="w-full max-w-md bg-white rounded-lg shadow p-8">
     <!-- Heading -->
-    <h1 class="text-2xl font-bold text-center mb-2">Nursing Station</h1>
+    <h1 class="text-2xl font-bold text-center mb-2">Packing Station</h1>
     <!-- Subheading -->
-    <p class="text-center text-gray-500 mb-6">Register laundry for processing</p>
+    <p class="text-center text-gray-500 mb-6">Register packed laundry items</p>
     
     <!-- Form -->
-    <form id="laundryForm">
+    <form id="packingForm">
       <!-- Number of Clothes -->
       <div class="mb-4">
         <label for="quantity" class="block font-semibold mb-1">Number of Clothes</label>
-        <div class="relative">
-          <input
-            type="number"
-            id="quantity"
-            name="quantity"
-            placeholder="Enter quantity"
-            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
-            required
-          />
-        </div>
+        <input
+          type="number"
+          id="quantity"
+          name="quantity"
+          placeholder="Enter quantity"
+          class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+          required
+        />
       </div>
       
       <!-- Type of Clothes -->
@@ -47,53 +45,6 @@
         </select>
       </div>
       
-      <!-- State of Clothes -->
-      <div class="mb-4">
-        <p class="font-semibold">State of Clothes</p>
-        <div class="mt-2 space-y-2">
-          <label class="flex items-center">
-            <input
-              type="radio"
-              name="state"
-              value="non-infected"
-              class="mr-2 focus:ring-0"
-              required
-            />
-            <span>Non-Infected</span>
-          </label>
-          <label class="flex items-center">
-            <input
-              type="radio"
-              name="state"
-              value="infected"
-              class="mr-2 focus:ring-0"
-              required
-            />
-            <span>Infected</span>
-          </label>
-          <label class="flex items-center">
-            <input
-              type="radio"
-              name="state"
-              value="highly-stained-infected"
-              class="mr-2 focus:ring-0"
-              required
-            />
-            <span>Highly Stained &amp; Infected</span>
-          </label>
-          <label class="flex items-center">
-            <input
-              type="radio"
-              name="state"
-              value="less-stained"
-              class="mr-2 focus:ring-0"
-              required
-            />
-            <span>Less Stained</span>
-          </label>
-        </div>
-      </div>
-      
       <!-- Submit Button -->
       <button
         type="submit"
@@ -109,29 +60,25 @@
 <div id="modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 hidden">
   <div class="bg-white rounded-lg shadow-lg p-8 relative max-w-xs w-full">
     <button id="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
-    <h1 class=" text-green-500 text-lg font-bold text-center mb-5">QR Code generated Successfully!</h1>
-
+    <h1 class="text-green-500 text-lg font-bold text-center mb-5">QR Code generated Successfully!</h1>
     <div id="qrcodeModal" class="flex justify-center mb-4"></div>
-
   </div>
 </div>
 
 <!-- Include QRCode.js library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-document.getElementById('laundryForm').addEventListener('submit', function(event) {
+document.getElementById('packingForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent form from submitting normally
     
     // Gather form values
     var quantity = document.getElementById('quantity').value;
     var clothesType = document.getElementById('clothes-type').value;
-    var state = document.querySelector('input[name="state"]:checked').value;
 
     // Create JSON object with form data
     var data = {
         "Number of Clothes": quantity,
-        "Type of Clothes": clothesType,
-        "State of Clothes": state
+        "Type of Clothes": clothesType
     };
 
     // Convert the JSON object to a string

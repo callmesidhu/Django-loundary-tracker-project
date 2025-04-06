@@ -1,7 +1,7 @@
 module.exports = {
         content: [
-          "./templates/**/*.html",
-          "./laundry_app/templates/**/*.html",
+          "./templates/**/*.jinja",
+          "./laundry_app/templates/**/*.jinja",
           "./laundry_app/static/js/**/*.js"
         ],
         theme: {

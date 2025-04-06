@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.template.context_processors import csrf
 from .models import Employee
 from django.contrib.auth import logout as django_logout
 
 def accounts(request):
-    return render(request, "accounts.html")
+    context = {}
+    context.update(csrf(request))  # Inject CSRF token into the context
+    return render(request, "accounts.jinja", context, using="jinja2")
 
 def logout(request):
     django_logout(request)  # Django's built-in logout
@@ -34,4 +37,7 @@ def login(request):
             print("DEBUG: Employee not found")
             messages.error(request, "Incorrect username or password.")
     
-    return render(request, "accounts.html")
+    # Ensure the CSRF token is included when rendering the login page
+    context = {}
+    context.update(csrf(request))
+    return render(request, "accounts.jinja", context, using="jinja2")
