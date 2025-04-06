@@ -41,7 +41,8 @@
 </div>
 
 <script>
-// Parse the tasks_data passed from the Django view
+// Parse the tasks_data passed from the Django view.
+// IMPORTANT: Each task object should include a "uuid" property.
 const tasksData = JSON.parse('{{ tasks_data|escapejs }}');
 
 let currentDate = new Date(); // Initialize with today's date
@@ -77,9 +78,11 @@ function updateTasks(dateStr) {
   
   tasks.forEach((item, index) => {
     const taskDiv = document.createElement('div');
-    taskDiv.className = index < tasks.length - 1 
-      ? 'flex items-center justify-between border-b border-gray-200 pb-2' 
-      : 'flex items-center justify-between';
+    // Make the entire task item clickable by adding a cursor pointer class
+    taskDiv.className = (index < tasks.length - 1 
+      ? 'flex items-center justify-between border-b border-gray-200 pb-2 cursor-pointer' 
+      : 'flex items-center justify-between cursor-pointer');
+
     taskDiv.innerHTML = `
       <div>
         <p class="font-semibold">${item.task}</p>
@@ -87,6 +90,25 @@ function updateTasks(dateStr) {
       </div>
       <p class="text-gray-600">${item.time}</p>
     `;
+    
+    // Add click event listener to redirect based on task name and UUID.
+    taskDiv.addEventListener('click', function() {
+      let url = "";
+      if (item.task === "Loading A") {
+        url = `/loading-start/?uuid=${item.uuid}/`;
+      } else if (item.task === "Unloading A") {
+        url = `/unloading-start/?uuid=${item.uuid}/`;
+      } else if (item.task === "Loading B") {
+        url = `/loading-end/?uuid=${item.uuid}/`;
+      } else if (item.task === "Unloading B") {
+        url = `/unloading-end/?uuid=${item.uuid}/`;
+      } else if (item.task === "Packing") {
+        url = `/packing/?uuid=${item.uuid}/`;
+      }
+      // Redirect to the URL
+      window.location.href = url;
+    });
+    
     taskList.appendChild(taskDiv);
   });
 }

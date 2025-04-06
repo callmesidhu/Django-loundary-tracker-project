@@ -16,11 +16,11 @@ def task_schedule(request):
 
         # Create a list of task dictionaries from the record
         tasks = [
-            {"task": "Loading A", "status": record.loading_a, "time": time_str},
-            {"task": "Unloading A", "status": record.unloading_a, "time": time_str},
-            {"task": "Loading B", "status": record.loading_b, "time": time_str},
-            {"task": "Unloading B", "status": record.unloading_b, "time": time_str},
-            {"task": "Packing",   "status": record.packing,   "time": time_str},
+            {"task": "Loading A", "status": record.loading_a, "time": time_str, "uuid": record.uuid},
+            {"task": "Unloading A", "status": record.unloading_a, "time": time_str, "uuid": record.uuid},
+            {"task": "Loading B", "status": record.loading_b, "time": time_str, "uuid": record.uuid},
+            {"task": "Unloading B", "status": record.unloading_b, "time": time_str, "uuid": record.uuid},
+            {"task": "Packing",   "status": record.packing,   "time": time_str, "uuid": record.uuid},
         ]
 
         # If there are already tasks for the given date, extend the list, otherwise create a new list.
