@@ -10,18 +10,55 @@
     <!-- Card Container -->
     <div class="bg-white rounded-lg shadow p-8 w-full max-w-xl flex flex-col items-center">
       <!-- Scanner Frame -->
-      <div class="border-4 border-blue-500 w-80 h-80 flex items-center justify-center">
+      <div class="border-4 border-blue-500 w-80 h-80 flex items-center justify-center" id="scanner-container">
         <div id="reader" style="width: 320px;"></div>
       </div>
-      <p class="mt-4 text-gray-600">Position QR code in the frame</p>
+      <p class="mt-4 text-gray-600" id="instruction">Position QR code in the frame</p>
+      
+      <!-- Display scanned UUID -->
+      <p class="mt-2 text-gray-700 hidden" id="uuid-display">Scanned UUID: </p>
+      
+      <!-- Completed Button (hidden by default) -->
+      <button id="complete-btn" class="mt-4 bg-green-500 text-white px-4 py-2 rounded hidden">
+        Mark as Complete
+      </button>
     </div>
   </div>
 
-  <!-- Script to initialize the scanner -->
+  <!-- Script to initialize the scanner and handle update -->
   <script>
+    let scannedData = null; // Global variable to store parsed QR data
+
     function onScanSuccess(decodedText, decodedResult) {
       console.log(`Code matched = ${decodedText}`, decodedResult);
-      // TODO: Handle successful scan (e.g., redirect, display info, etc.)
+      
+      // Attempt to parse the decoded text as JSON
+      try {
+        scannedData = JSON.parse(decodedText);
+      } catch (e) {
+        // If it's not valid JSON, fall back to the raw text
+        scannedData = decodedText;
+      }
+
+      // Hide the QR scanner container if desired
+      document.getElementById("scanner-container").classList.add("hidden");
+      document.getElementById("instruction").innerText = "QR Code scanned. Click Completed to update.";
+
+      // Determine what to display as UUID
+      let displayUuid = "";
+      if (typeof scannedData === "object" && scannedData.UUID) {
+        displayUuid = scannedData.UUID;
+      } else {
+        displayUuid = scannedData;
+      }
+
+      // Show the scanned UUID
+      const uuidDisplayElem = document.getElementById("uuid-display");
+      uuidDisplayElem.innerText = "Scanned UUID: " + displayUuid;
+      uuidDisplayElem.classList.remove("hidden");
+
+      // Reveal the Completed button
+      document.getElementById("complete-btn").classList.remove("hidden");
     }
 
     function onScanError(errorMessage) {
@@ -36,6 +73,61 @@
       false
     );
     html5QrcodeScanner.render(onScanSuccess, onScanError);
+
+    // Attach click event to the Completed button
+    document.getElementById("complete-btn").addEventListener("click", function() {
+      let uuidValue = "";
+      if (typeof scannedData === "object" && scannedData.UUID) {
+        uuidValue = scannedData.UUID;
+      } else if (typeof scannedData === "string") {
+        uuidValue = scannedData;
+      }
+
+      if (!uuidValue) {
+        alert("No UUID available. Please scan again.");
+        return;
+      }
+
+      // Send a PUT request to update the task
+      fetch("/unloading-start/update/", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body: JSON.stringify({ uuid: uuidValue })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === "success") {
+          alert("Task updated successfully!");
+          window.location.href = "/task-schedule/"
+          // Optionally, you can redirect or update the UI further here.
+        } else {
+          alert("Error updating task: " + data.message);
+        }
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        alert("An error occurred.");
+      });
+    });
+
+    // Helper function to get CSRF token (if using Django's CSRF protection)
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + "=")) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
   </script>
 </body>
 {% endblock %}
