@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-lps2fp1=#^fgw(-3ju7&hy%olws_e049tj1i#u$)wq7=tk8-ad"
 DEBUG = True
 ALLOWED_HOSTS = ['django-loundary-tracker-project-production.up.railway.app', '127.0.0.1', 'localhost']
-CSRF_TRUSTED_ORIGINS = ['https://django-loundary-tracker-project-production.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://django-loundary-tracker-project-production.up.railway.app', '127.0.0.1', 'localhost']
 
 
 INSTALLED_APPS = [
