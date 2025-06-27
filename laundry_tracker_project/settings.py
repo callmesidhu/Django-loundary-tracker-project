@@ -5,8 +5,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "django-insecure-lps2fp1=#^fgw(-3ju7&hy%olws_e049tj1i#u$)wq7=tk8-ad"
 DEBUG = True
-ALLOWED_HOSTS = ['django-loundary-tracker-project.onrender.com', '127.0.0.1', 'localhost']
-CSRF_TRUSTED_ORIGINS = ['django-loundary-tracker-project.onrender.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['django-loundary-tracker-project.onrender.com', '127.0.0.1', 'localhost', 'https://django-loundary-tracker-project.onrender.com',
+    'http://127.0.0.1',
+    'http://localhost']
+CSRF_TRUSTED_ORIGINS = ['django-loundary-tracker-project.onrender.com', '127.0.0.1', 'localhost','https://django-loundary-tracker-project.onrender.com',
+    'http://127.0.0.1',
+    'http://localhost']
 
 
 INSTALLED_APPS = [
